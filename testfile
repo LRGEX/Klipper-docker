@@ -1,0 +1,226 @@
+FROM debian:bullseye-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Create user lrgex
+RUN useradd -d /home/lrgex -ms /bin/bash lrgex
+
+# Install necessary packages
+RUN apt-get update -y && apt-get install -y \
+    build-essential \
+    sudo \
+    git \
+    curl \
+    wget \
+    nano \
+    && rm -rf /var/lib/apt/lists/* \
+    # installing kiauh
+    && mkdir -p /opt/lrgex \
+    && cd /opt/lrgex \
+    && git clone https://github.com/dw-0/kiauh.git
+
+# Give lrgex passwordless sudo privileges
+RUN echo 'lrgex ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Switch to user lrgex
+USER lrgex
+
+# Set the working directory
+WORKDIR /opt/lrgex/kiauh
+
+# Copy scripts
+COPY scripts/ /opt/lrgex/kiauh/
+
+# Make files in /opt/lrgex/kiauh executable
+RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \; 
+
+# Set the default command
+# ENTRYPOINT [ "/opt/lrgex/kiauh/docker-entrypoint.sh" ]
+CMD [ "tail", "-f", "/dev/null" ]
+
+
+##############################################################################################
+##############################################################################################
+
+FROM debian:bullseye-slim
+
+# Avoid warnings by switching to noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install systemd
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    systemd \
+    systemd-sysv \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* \
+# Remove unnecessary systemd services
+&& find /etc/systemd/system \
+     /lib/systemd/system \
+     -path '*.wants/*' \
+     -not -name '*journald*' \
+     -not -name '*systemd-tmpfiles*' \
+     -not -name '*systemd-user-sessions*' \
+     -exec rm \{} \;
+
+# Create a dummy service
+RUN echo -e '[Unit]\nDescription=Dummy Service\n\n[Service]\nType=oneshot\nExecStart=/bin/sleep infinity\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/dummy.service
+
+# Enable the dummy service
+RUN systemctl enable dummy.service
+
+# Set stop signal to systemd init
+STOPSIGNAL SIGRTMIN+3
+
+# Expose the usual systemd directories as volumes
+VOLUME [ "/sys/fs/cgroup" ]
+
+CMD ["/lib/systemd/systemd"]
+
+##############################################################################################
+##############################################################################################
+
+FROM debian:bullseye
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV container docker
+ENV LC_ALL C
+
+
+USER root
+
+# Create user lrgex
+RUN useradd -d /home/lrgex -ms /bin/bash lrgex
+
+# Install necessary packages
+RUN apt-get update -y && apt-get install -y \
+    build-essential \
+    sudo \
+    systemd \
+    systemd-sysv \
+    git \
+    curl \
+    wget \
+    nano \
+    virtualenv \
+    python3-dev \
+    libffi-dev \
+    libncurses-dev \
+    libusb-dev \
+    avrdude \
+    gcc-avr \
+    binutils-avr \
+    avr-libc \
+    stm32flash \
+    libnewlib-arm-none-eabi \
+    gcc-arm-none-eabi \
+    binutils-arm-none-eabi \
+    libusb-1.0-0-dev \
+    pkg-config \
+    dfu-util \
+    unzip \
+    libjpeg-dev \
+    python3-libgpiod \
+    liblmdb-dev \
+    libopenjp2-7 \
+    libsodium-dev \
+    packagekit \
+    wireless-tools \
+    nginx \
+    expect \
+    # Downloading kiauh
+    && mkdir -p /opt/lrgex \
+    && cd /opt/lrgex \
+    && git clone https://github.com/dw-0/kiauh.git \
+    # Clean up
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Remove unnecessary systemd services
+RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
+    /etc/systemd/system/*.wants/* \
+    /lib/systemd/system/local-fs.target.wants/* \
+    /lib/systemd/system/sockets.target.wants/*udev* \
+    /lib/systemd/system/sockets.target.wants/*initctl* \
+    /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* \
+    /lib/systemd/system/systemd-update-utmp*
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+# Give lrgex passwordless sudo privileges
+RUN echo 'lrgex ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+
+# Set the working directory
+WORKDIR /opt/lrgex/kiauh
+
+# Copy scripts
+COPY scripts/ /opt/lrgex/kiauh/
+
+# Make files in /opt/lrgex/kiauh executable
+RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \;
+
+ENV TERM xterm
+
+
+# Create a dummy service
+RUN echo -e '[Unit]\nDescription=Dummy Service\n\n[Service]\nType=oneshot\nExecStart=/bin/sleep infinity\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/dummy.service
+
+# Enable the dummy service
+RUN systemctl enable dummy.service
+
+# Switch to user lrgex
+# USER lrgex
+
+# Set stop signal to systemd init
+STOPSIGNAL SIGRTMIN+3
+
+# RUN mkdir -p /run /run/lock
+
+# VOLUME ["/run", "/run/lock", "/sys/fs/cgroup"]
+
+
+# Set the default command
+# ENTRYPOINT [ "/opt/lrgex/kiauh/docker-entrypoint.sh" ]
+# CMD [ "tail", "-f", "/dev/null" ]
+CMD ["/lib/systemd/systemd"]
+# CMD ["/opt/lrgex/kiauh/kiauh.sh"]
+# CMD ["/usr/sbin/init"]
+
+
+##############################################################################################
+##############################################################################################
+
+# THIS WORKS WITH THIS AS RUN COMMAND
+# sudo docker run -d --name klipper --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
+FROM debian:11
+
+# Required for systemd AS IS
+ENV container docker
+
+# Avoid warnings by switching to noninteractive
+ENV DEBIAN_FRONTEND noninteractive
+
+# Required for systemd AS IS
+STOPSIGNAL SIGRTMIN+3
+
+# Enable systemd.
+RUN apt-get update ; \
+    apt-get install -y systemd systemd-sysv; \
+    # Clean up
+    apt-get clean ; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ; \
+    # Remove unnecessary systemd files AS IS
+    rm -rf /lib/systemd/system/multi-user.target.wants/* ; \
+    rm -rf /etc/systemd/system/*.wants/* ; \
+    rm -rf /lib/systemd/system/local-fs.target.wants/* ; \
+    rm -rf /lib/systemd/system/sockets.target.wants/*udev* ; \
+    rm -rf /lib/systemd/system/sockets.target.wants/*initctl* ; \
+    rm -rf /lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup* ; \
+    rm -rf /lib/systemd/system/systemd-update-utmp*
+
+# Required for systemd AS IS
+VOLUME [ "/tmp", "/run", "/run/lock" ]
+
+# Set the default command AS IS
+CMD [ "/lib/systemd/systemd", "log-level=info", "unit=sysinit.target" ]
