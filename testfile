@@ -222,5 +222,5 @@ RUN apt-get update ; \
 # Required for systemd AS IS
 VOLUME [ "/tmp", "/run", "/run/lock" ]
 
-# Set the default command AS IS
-CMD [ "/lib/systemd/systemd", "log-level=info", "unit=sysinit.target" ]
+# Set the default command
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
