@@ -84,7 +84,7 @@ ENV TERM xterm
 # Enable systemd init system in the container
 VOLUME [ "/tmp", "/run", "/run/lock" ]
 
-# Start systemd /lib/systemd/systemd this for systemd to initialize, "log-level=info" is for debugging , "unit=sysinit.target" is for systemd to initialize
-CMD [ "/lib/systemd/systemd", "log-level=info", "unit=sysinit.target" ]
+# Set the entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 # sudo docker run -d --name klipper -p 8562:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
