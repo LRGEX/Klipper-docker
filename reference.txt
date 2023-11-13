@@ -5,3 +5,5 @@ https://github.com/dimalo/klipper-web-control-docker/blob/main/klipper/Dockerfil
 https://github.com/dw-0/kiauh
 
 https://serverfault.com/questions/1053187/systemd-fails-to-run-in-a-docker-container-when-using-cgroupv2-cgroupns-priva/1054414#1054414
+
+sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -p 5001:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker
