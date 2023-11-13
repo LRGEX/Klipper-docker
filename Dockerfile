@@ -1,12 +1,12 @@
 FROM debian:11
 
-# Required for systemd
+# Required for systemd AS IS
 ENV container docker
 
 # Required for apt-get to not prompt for user input
 ENV DEBIAN_FRONTEND noninteractive
 
-# Set stop signal to systemd init
+# Set stop signal to systemd init AS IS
 STOPSIGNAL SIGRTMIN+3
 
 # Enable systemd and install necessary packages

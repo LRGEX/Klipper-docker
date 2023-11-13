@@ -3,3 +3,5 @@ https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-ho
 https://github.com/dimalo/klipper-web-control-docker/blob/main/klipper/Dockerfile
 
 https://github.com/dw-0/kiauh
+
+https://serverfault.com/questions/1053187/systemd-fails-to-run-in-a-docker-container-when-using-cgroupv2-cgroupns-priva/1054414#1054414
