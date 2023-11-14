@@ -17,7 +17,7 @@ EOF
 backarosa=$(grep -c "restore done" /opt/lrgex/flags)
 if [ ! $backarosa ]; then
     echo "Backuping klipper files..."
-    cp -r /home/lrgex/klipper/printer_data /tmp/klipper_printer_data
+    cp -r /home/lrgex /tmp/lrgex
 fi
 
 ##################### End Backarosa #####################
@@ -66,9 +66,10 @@ for package in "${packages_array[@]}"; do
     fi
 done
 
-if [ "${RESTORE}" = "true" ]; then
+if [ "${RESTORE}" = "true" ] && [ ! $backarosa ]; then
     echo "Restoring klipper files..."
-    cp -r /tmp/klipper_printer_data /home/lrgex/klipper/printer_data
+    cp -r /tmp/lrgex /home/lrgex
+    rm -rf /tmp/lrgex
     echo "restore done" >> /opt/lrgex/flags
 fi
 
