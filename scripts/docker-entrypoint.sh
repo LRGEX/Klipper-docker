@@ -41,17 +41,19 @@ for package in "${packages_array[@]}"; do
         echo "Installing Fluidd with Kiauh..."
         su lrgex -c 'expect ./fluidd.exp'
     elif [ -d "/home/lrgex/mainsail" ]; then
-        echo "Mainsail detected, skipping Fluidd installation."
-        echo "If you want to install Fluidd, please re run the container without the Mainsail package. .e.g [-e PACKAGES=klipper,moonraker,fluidd]]"
+        echo -e "\e[31mMainsail detected, skipping Fluidd installation.\e[0m"
+        echo -e "\e[31mIf you want to install Fluidd, please re run the container without the Mainsail package. .e.g [-e PACKAGES=klipper,moonraker,fluidd]]\e[0m"
         sleep 5
+        break
     fi
     if [ "${package}" = "mainsail" ] && [ ! -d "/home/lrgex/mainsail" ] && [ ! -d "/home/lrgex/fluidd" ]; then
         echo "Installing Mainsail with Kiauh..."
         su lrgex -c 'expect ./mainsail.exp'
     elif [ -d "/home/lrgex/fluidd" ]; then
-        echo "Fluidd detected, skipping Mainsail installation."
-        echo "If you want to install Mainsail, please re run the container without the Fluidd package. .e.g [-e PACKAGES=klipper,moonraker,mainsail]"
+        echo -e "\e[31mFluidd detected, skipping Mainsail installation.\e[0m"
+        echo -e "\e[31mIf you want to install Mainsail, please re run the container without the Fluidd package. .e.g [-e PACKAGES=klipper,moonraker,mainsail]\e[0m"
         sleep 5
+        break
     fi
 done
 
