@@ -18,23 +18,28 @@ expect {
         # using condition here to make a break for the loop created by exp_continue as i need to use the pattern 2 times one for pressing 1 and one for pressing q
         if {$menu} {
             send "1\r"
+            sleep 3
             exp_continue
         } else {
             send "q\r"
+            sleep 3
             exp_continue
         }
     }
     "*Installation Menu*" {
         if {$menu} {
             send "3\r"
+            sleep 3
             exp_continue
         } else {
             send "b\r"
+            sleep 3
             exp_continue
         }
     }
     "*Download the recommended macros? (Y/n):*" {
         send "y\r"
+        sleep 3
         set menu 0
         exp_continue
     }
