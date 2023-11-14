@@ -76,19 +76,16 @@ WORKDIR /opt/lrgex/kiauh
 COPY scripts/ /opt/lrgex/kiauh/
 
 # Make files in /opt/lrgex/kiauh executable
-RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \;
+RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \; \
+    && git config --global --add safe.directory /opt/lrgex/kiauh
 
 # Set the default shell to bash instead of sh beacuse kiauh needs this terminal
 ENV TERM xterm
-
-COPY scripts/docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 
 # Enable systemd init system in the container
 VOLUME [ "/tmp", "/run", "/run/lock" ]
 
 # Set the entrypoint
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/lrgex/kiauh/docker-entrypoint.sh"]
 
 # sudo docker run -d --name klipper -p 8562:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
