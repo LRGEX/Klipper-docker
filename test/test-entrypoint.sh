@@ -25,6 +25,12 @@ else
     echo "NGINX is already running."
 fi
 
+# install klipper with kiauh
+if [ "${KLIPPER}" = "true" ]; then
+    su lrgex -c '/opt/lrgex/kiauh/kiauh.exp'
+    # Any subsequent commands that need root privileges should be executed with `sudo`
+fi
+
 ##################### End code #####################
 
 

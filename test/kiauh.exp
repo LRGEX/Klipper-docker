@@ -1,1 +1,19 @@
-# an expect script
+#!/usr/bin/expect
+
+# Set timeout to prevent hanging if the script doesn't find what it expects
+set timeout 20
+
+# Launch your program here
+spawn /opt/lrgex/kiauh/kiauh.sh
+
+# Expect script to interact with the program
+expect "####### Perform action: " { send "1\r" }
+expect "####### Perform action: " { send "1\r" }
+expect "###### Select Python version: " { send "1\r" }
+expect "###### Number of Klipper instances to set up: " { send "1\r" }
+expect "###### Add user 'lrgex' to group(s) now? (Y/n): " { send "1\r" }
+expect "####### Perform action: " { send "b\r" }
+expect "####### Perform action: " { send "q\r" }
+
+# Wait for the program to finish
+expect eof

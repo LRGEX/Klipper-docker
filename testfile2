@@ -6,6 +6,8 @@ ENV container docker
 # Required for apt-get to not prompt for user input
 ENV DEBIAN_FRONTEND noninteractive
 
+ENV KLIPPER="true"
+
 # Set stop signal to systemd init AS IS
 STOPSIGNAL SIGRTMIN+3
 
@@ -73,7 +75,7 @@ RUN apt-get update -y \
 WORKDIR /opt/lrgex/kiauh
 
 # Copy scripts
-COPY scripts/ /opt/lrgex/kiauh/
+COPY test/ /opt/lrgex/kiauh/
 
 # Make files in /opt/lrgex/kiauh executable
 RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \;
@@ -81,14 +83,14 @@ RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \;
 # Set the default shell to bash instead of sh beacuse kiauh needs this terminal
 ENV TERM xterm
 
-COPY scripts/docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# COPY scripts/docker-entrypoint.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 
 # Enable systemd init system in the container
 VOLUME [ "/tmp", "/run", "/run/lock" ]
 
 # Set the entrypoint
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/lrgex/kiauh/test-entrypoint.sh"]
 
 # sudo docker run -d --name klipper -p 8562:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
