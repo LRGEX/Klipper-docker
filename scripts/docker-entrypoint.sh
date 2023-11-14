@@ -66,7 +66,7 @@ for package in "${packages_array[@]}"; do
     fi
 done
 
-if [ ${RESTORE} = "true" ]; then
+if [ "${RESTORE}" = "true" ]; then
     echo "Restoring klipper files..."
     cp -r /tmp/klipper_printer_data /home/lrgex/klipper/printer_data
     echo "restore done" >> /opt/lrgex/flags
