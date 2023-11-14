@@ -4,7 +4,7 @@
 
 
 # Set timeout
-set timeout 60
+set timeout 300
 
 # Start your process
 spawn /opt/lrgex/kiauh/kiauh.sh
