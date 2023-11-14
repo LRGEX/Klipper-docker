@@ -8,6 +8,7 @@ on:
       - '**/testfile'
       - '**/reference.txt'
       - '**/testfile2'
+      - '**/test-entrypoint.sh'
 
 jobs:
   docker:
