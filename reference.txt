@@ -11,3 +11,6 @@ sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -v /home/lr
 
 
 sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker
+
+
+sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 -e PACKAGES="klipper moonraker fluidd" --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker:2.0
