@@ -40,7 +40,7 @@ services:
     security_opt:
       - seccomp=unconfined
     cgroup_parent: docker.slice
-    cgroupns: host
+    cgroup: private
     tmpfs:
       - /tmp
       - /run
@@ -51,7 +51,7 @@ services:
       - "5001:80"
       - "7125:7125"
     environment:
-      - PACKAGES=klipper moonraker fluidd
+      - PACKAGES="klipper moonraker fluidd"
 
   klipper-backarosa:
     image: lrgex/backarosa
