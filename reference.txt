@@ -13,4 +13,61 @@ sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -v /home/lr
 sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker
 
 
+sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 -e PACKAGES="klipper moonraker fluidd" -v klipper-config:/home/lrgex/klipper/printer_data --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker:2.0
+
 sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 -e PACKAGES="klipper moonraker fluidd" --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker:2.0
+
+docker run -d \
+-e KEEP_VERSIONS="2" \
+-v /mnt/backups/klipper:/backup \
+-v klipper-config:/source:ro \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-e LOCAL_BACKUP="true" \
+-e TZ="Asia/Riyadh" \
+-e CRON="0 8 * * *" \
+--restart always \
+--name backarosa-klipper lrgex/backarosa backup
+
+version: '3.8'
+
+services:
+  klipper:
+    image: lrgex/klipper-docker:2.0
+    container_name: klipper
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp=unconfined
+    cgroup_parent: docker.slice
+    cgroupns: host
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - klipper-config:/home/lrgex/klipper/printer_data
+    ports:
+      - "5001:80"
+      - "7125:7125"
+    environment:
+      - PACKAGES=klipper moonraker fluidd
+
+  klipper-backarosa:
+    image: lrgex/backarosa
+    container_name: klipper-backarosa
+    restart: always
+    command: /bin/sh -c "sleep 180 && backup"
+    volumes:
+      - /mnt/backups/klipper:/backup
+      - klipper-config:/source:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - KEEP_VERSIONS=2
+      - LOCAL_BACKUP=true
+      - TZ=Asia/Riyadh
+      - CRON=0 8 * * *
+
+volumes:
+  klipper-config:
+

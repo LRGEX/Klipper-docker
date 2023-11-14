@@ -52,6 +52,7 @@ RUN apt-get update -y && apt-get install -y \
 
 # Downloading kiauh
 RUN mkdir -p /opt/lrgex \
+    && touch /opt/lrgex/flags \
     && cd /opt/lrgex \
     && git clone https://github.com/dw-0/kiauh.git
 

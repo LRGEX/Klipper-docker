@@ -8,10 +8,19 @@ cat << "EOF"
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝ 
 ╦╔═┬  ┬┌─┐┌─┐┌─┐┬─┐
 ╠╩╗│  │├─┘├─┘├┤ ├┬┘
-╩ ╩┴─┘┴┴  ┴  └─┘┴└─   v2.0                                  
+╩ ╩┴─┘┴┴  ┴  └─┘┴└─   v2.3                                  
 EOF
 
 ##################### Starting code #####################
+
+##################### Backarosa #####################
+backarosa=$(grep -c "restore done" /opt/lrgex/flags)
+if [ ! $backarosa ]; then
+    echo "Backuping klipper files..."
+    cp -r /home/lrgex/klipper/printer_data /tmp/klipper_printer_data
+fi
+
+##################### End Backarosa #####################
 
 # This script will run on every container start
 if ! systemctl is-enabled nginx > /dev/null 2>&1; then
@@ -56,6 +65,12 @@ for package in "${packages_array[@]}"; do
         break
     fi
 done
+
+if [ ${RESTORE} = "true" ]; then
+    echo "Restoring klipper files..."
+    cp -r /tmp/klipper_printer_data /home/lrgex/klipper/printer_data
+    echo "restore done" >> /opt/lrgex/flags
+fi
 
 ##################### End code #####################
 
