@@ -84,12 +84,12 @@ RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \; \
 ENV TERM xterm
 
 # this to install klipper, moonraker and fluidd, you can change fluidd to mainsail
-ENV PACKAGES="klipper moonraker mainsail"
+# ENV PACKAGES="klipper moonraker mainsail"
 
-# this has the script to install klipper, moonraker and fluidd
-RUN ./klipper.sh
+# # this has the script to install klipper, moonraker and fluidd
+# RUN ./klipper.sh
 
-ENV PACKAGES=""
+# ENV PACKAGES=""
 
 # Enable systemd init system in the container
 VOLUME [ "/tmp", "/run", "/run/lock" ]
