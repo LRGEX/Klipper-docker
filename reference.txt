@@ -17,22 +17,66 @@ sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -p 5001:80 
 
 sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 -e PACKAGES="klipper moonraker fluidd" --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock lrgex/klipper-docker:2.0
 
-docker run -d \
+
+sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -p 5001:80 -p 7125:7125 -v klipper-config:/home/lrgex/printer_data --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
+
+
+sudo docker run -d \
+-e KEEP_VERSIONS="2" \
+-v /mnt/fastshare/klipper:/backup \
+-v klipper-config:/source:ro \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-e LOCAL_BACKUP="true" \
+-e TZ="Asia/Riyadh" \
+--restart no \
+--name backarosa-klipper lrgex/backarosa backup
+
+
+
+
+sudo docker run -d \
+--name klipper \
+--device /dev/ttyUSB0:/dev/ttyUSB0 \
+-p 5001:80 \
+-p 7125:7125 \
+-e PACKAGES="klipper moonraker fluidd" \
+-v klipper-config:/home/lrgex \
+--privileged \
+--cap-add SYS_ADMIN \
+--security-opt seccomp=unconfined \
+--cgroup-parent=docker.slice \
+--cgroupns private \
+--tmpfs /tmp \
+--tmpfs /run \
+--tmpfs /run/lock \
+lrgex/klipper-docker
+
+
+sudo docker run -d \
 -e KEEP_VERSIONS="2" \
 -v /mnt/backups/klipper:/backup \
 -v klipper-config:/source:ro \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -e LOCAL_BACKUP="true" \
 -e TZ="Asia/Riyadh" \
--e CRON="0 8 * * *" \
---restart always \
+--restart no \
 --name backarosa-klipper lrgex/backarosa backup
+
+
+docker run --rm \
+-v /mnt/backups/klipper:/backup \
+-v klipper-config:/source \
+-e LOCAL_BACKUP="true" \
+-e TZ="Asia/Riyadh" \
+-e RESTORE_VERSION="0" \
+lrgex/backarosa restore
+
 
 version: '3.8'
 
 services:
   klipper:
-    image: lrgex/klipper-docker:2.0
+    image: klipper
     container_name: klipper
     privileged: true
     cap_add:
@@ -46,7 +90,7 @@ services:
       - /run
       - /run/lock
     volumes:
-      - klipper-config:/home/lrgex/klipper/printer_data
+      - klipper-config:/home/lrgex/printer_data
     ports:
       - "5001:80"
       - "7125:7125"
@@ -59,9 +103,9 @@ services:
     image: lrgex/backarosa
     container_name: klipper-backarosa
     restart: always
-    command: /bin/sh -c "sleep 180 && backup"
+    command: backup
     volumes:
-      - /mnt/backups/klipper:/backup
+      - /mnt/fastshare/klipper:/backup
       - klipper-config:/source:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -72,4 +116,4 @@ services:
 
 volumes:
   klipper-config:
-
+    external: true

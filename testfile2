@@ -84,7 +84,7 @@ RUN find /opt/lrgex/kiauh -type f -exec chmod +x {} \; \
 # Set the default shell to bash instead of sh beacuse kiauh needs this terminal
 ENV TERM xterm
 
-# ENV KLIPPER=""
+
 
 # COPY scripts/docker-entrypoint.sh /usr/local/bin/
 # RUN chmod +x /usr/local/bin/docker-entrypoint.sh

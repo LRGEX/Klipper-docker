@@ -8,10 +8,19 @@ cat << "EOF"
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝ 
 ╦╔═┬  ┬┌─┐┌─┐┌─┐┬─┐
 ╠╩╗│  │├─┘├─┘├┤ ├┬┘
-╩ ╩┴─┘┴┴  ┴  └─┘┴└─   v2.0                                  
+╩ ╩┴─┘┴┴  ┴  └─┘┴└─   v2.3                                  
 EOF
 
 ##################### Starting code #####################
+
+##################### Backarosa #####################
+backarosa=$(grep -c "restore done" /opt/lrgex/flags)
+if [ ! $backarosa ]; then
+    echo "Backuping klipper files..."
+    cp -r /home/lrgex /tmp/lrgex
+fi
+
+##################### End Backarosa #####################
 
 # This script will run on every container start
 if ! systemctl is-enabled nginx > /dev/null 2>&1; then
@@ -40,7 +49,7 @@ for package in "${packages_array[@]}"; do
     if [ "${package}" = "fluidd" ] && [ ! -d "/home/lrgex/fluidd" ] && [ ! -d "/home/lrgex/mainsail" ]; then
         echo "Installing Fluidd with Kiauh..."
         su lrgex -c 'expect ./fluidd.exp'
-    elif [ -d "/home/lrgex/mainsail" ]; then
+    elif [ -d "/home/lrgex/mainsail" ] && [ "${package}" = "fluidd" ]; then
         echo -e "\e[31mMainsail detected, skipping Fluidd installation.\e[0m"
         echo -e "\e[31mIf you want to install Fluidd, please re run the container without the Mainsail package. .e.g [-e PACKAGES=\"klipper moonraker fluidd\"]\e[0m"
         sleep 5
@@ -49,13 +58,20 @@ for package in "${packages_array[@]}"; do
     if [ "${package}" = "mainsail" ] && [ ! -d "/home/lrgex/mainsail" ] && [ ! -d "/home/lrgex/fluidd" ]; then
         echo "Installing Mainsail with Kiauh..."
         su lrgex -c 'expect ./mainsail.exp'
-    elif [ -d "/home/lrgex/fluidd" ]; then
+    elif [ -d "/home/lrgex/fluidd" ] && [ "${package}" = "mainsail" ]; then
         echo -e "\e[31mFluidd detected, skipping Mainsail installation.\e[0m"
         echo -e "\e[31mIf you want to install Mainsail, please re run the container without the Fluidd package. .e.g [-e PACKAGES=\"klipper moonraker mainsail\"]\e[0m"
         sleep 5
         break
     fi
 done
+
+if [ "${RESTORE}" = "true" ] && [ ! $backarosa ]; then
+    echo "Restoring klipper files..."
+    cp -r /tmp/lrgex /home/lrgex
+    rm -rf /tmp/lrgex
+    echo "restore done" >> /opt/lrgex/flags
+fi
 
 ##################### End code #####################
 

@@ -4,7 +4,7 @@
 
 
 # Set timeout
-set timeout 60
+set timeout 300
 
 # Start your process
 spawn /opt/lrgex/kiauh/kiauh.sh
@@ -18,31 +18,38 @@ expect {
         # using condition here to make a break for the loop created by exp_continue as i need to use the pattern 2 times one for pressing 1 and one for pressing q
         if {$menu} {
             send "1\r"
+            sleep 3
             exp_continue
         } else {
             send "q\r"
+            sleep 3
             exp_continue
         }
     }
     "*Installation Menu*" {
         if {$menu} {
             send "1\r"
+            sleep 3
             exp_continue
         } else {
             send "b\r"
+            sleep 3
             exp_continue
         }
     }
     "*Initializing Klipper installation*" {
         send "\r"
+        sleep 3
         exp_continue
     }
     "*Setting up too many instances may crash your system*" {
         send "\r"
+        sleep 3
         exp_continue
     }
     "*WARNING: Your current user is not in group:*" {
         send "y\r"
+        sleep 3
         # Change the condition to stop interacting with menus
         set menu 0
         exp_continue
