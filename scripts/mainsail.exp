@@ -2,6 +2,8 @@
 
 # expect used tcl syntax which is very indetaion and spaces sensitive keep that in mind
 
+# Set timeout
+set timeout 3000
 
 # Start your process
 spawn /opt/lrgex/kiauh/kiauh.sh
@@ -39,5 +41,9 @@ expect {
         sleep 3
         set menu 0
         exp_continue
+    }
+    timeout {
+        puts "Operation timed out"
+        exit 1
     }
 }
