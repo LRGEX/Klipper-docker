@@ -6,21 +6,12 @@ cat << "EOF"
 ██║     ██╔══██╗██║   ██║██╔══╝   ██╔██╗ 
 ███████╗██║  ██║╚██████╔╝███████╗██╔╝ ██╗
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝ 
-╦╔═┬  ┬┌─┐┌─┐┌─┐┬─┐
-╠╩╗│  │├─┘├─┘├┤ ├┬┘
-╩ ╩┴─┘┴┴  ┴  └─┘┴└─   v2.3                                  
+╦╔═┬  ┬┌─┐┌─┐┌─┐┬─┐  ╔╦╗┌─┐┌─┐┬┌─┌─┐┬─┐
+╠╩╗│  │├─┘├─┘├┤ ├┬┘───║║│ ││  ├┴┐├┤ ├┬┘
+╩ ╩┴─┘┴┴  ┴  └─┘┴└─  ═╩╝└─┘└─┘┴ ┴└─┘┴└─   v2.5                                  
 EOF
 
 ##################### Starting code #####################
-
-##################### Backarosa #####################
-backarosa=$(grep -c "restore done" /opt/lrgex/flags)
-if [ ! $backarosa ]; then
-    echo "Backuping klipper files..."
-    cp -r /home/lrgex /tmp/lrgex
-fi
-
-##################### End Backarosa #####################
 
 # This script will run on every container start
 if ! systemctl is-enabled nginx > /dev/null 2>&1; then
@@ -65,13 +56,6 @@ for package in "${packages_array[@]}"; do
         break
     fi
 done
-
-if [ "${RESTORE}" = "true" ] && [ ! $backarosa ]; then
-    echo "Restoring klipper files..."
-    cp -r /tmp/lrgex /home/lrgex
-    rm -rf /tmp/lrgex
-    echo "restore done" >> /opt/lrgex/flags
-fi
 
 ##################### End code #####################
 

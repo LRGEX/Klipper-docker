@@ -64,7 +64,7 @@ sudo docker run -d \
 
 
 docker run --rm \
--v /mnt/backups/klipper:/backup \
+-v /mnt/fastshare/klipper:/backup \
 -v klipper-config:/source \
 -e LOCAL_BACKUP="true" \
 -e TZ="Asia/Riyadh" \
@@ -94,15 +94,13 @@ services:
     ports:
       - "5001:80"
       - "7125:7125"
-    environment:
-      - PACKAGES="klipper moonraker fluidd"
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
 
   klipper-backarosa:
     image: lrgex/backarosa
     container_name: klipper-backarosa
-    restart: always
+    restart: no
     command: backup
     volumes:
       - /mnt/fastshare/klipper:/backup
@@ -116,4 +114,3 @@ services:
 
 volumes:
   klipper-config:
-    external: true
