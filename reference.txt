@@ -76,7 +76,7 @@ version: '3.8'
 
 services:
   klipper:
-    image: klipper
+    image: lrgex/klipper-docker:kmf-v2.5
     container_name: klipper
     privileged: true
     cap_add:
@@ -103,7 +103,7 @@ services:
     restart: no
     command: backup
     volumes:
-      - /mnt/fastshare/klipper:/backup
+      - /mnt/backups/klipper:/backup
       - klipper-config:/source:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
