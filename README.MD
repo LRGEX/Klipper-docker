@@ -16,6 +16,13 @@
 
 
 
+## Developers:
+
+- Hesham M ALAHDAL a.k.a L.R.G
+- Nidhal A Brniyyah a.k.a Ezmex
+
+
+
 ## What are we using to accomplish this?
 
 - we used [Kiauh](https://github.com/dw-0/kiauh) as main source of the installation of Fluidd/mainsail,klipper and moonraker
@@ -222,5 +229,30 @@ then
 
 
 
+[Backarosa](https://github.com/LRGEX/backarosa) is a docker container developed by LRGEX, forked from [Duplicati](https://www.duplicati.com/) that has the ability to wok perfectly for both x86 and Arm architectures, you can see more information about it on https://github.com/LRGEX/backarosa
 
 
+
+##### To backup your container:
+
+-  All you have to do is to start lrgex/backarosa container, and backup process will begins, keep in mind Backarosa will close LRGEX-klipper container for 30 sec in order to take full backup of it, so **dont** use it while you are printing something.
+- The default backup files  location will be on /mnt/backups/klipper, depending on your settings of docker-compose, so if you change that in docker compose use it accordingly. 
+
+
+
+#### To restore your backup:
+
+- The way Backarosa works is to first restore the backed up volume then you run the docker compose. 
+
+- run this command to restore your backups, change -v /mnt/backups/klipper:/backup  if you used another volume directory...
+  ```dockerfile
+  sudo docker run --rm \
+  -v /mnt/backups/klipper:/backup \
+  -v klipper-config:/source \
+  -e LOCAL_BACKUP="true" \
+  -e TZ="Asia/Riyadh" \
+  -e RESTORE_VERSION="0" \
+  lrgex/backarosa restore
+  ```
+
+  
