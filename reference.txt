@@ -20,7 +20,7 @@ sudo docker run -d --name klipper -p 5001:80 -p 7125:7125 -e PACKAGES="klipper m
 
 sudo docker run -d --name klipper --device /dev/ttyUSB0:/dev/ttyUSB0 -p 5001:80 -p 7125:7125 -v klipper-config:/home/lrgex/printer_data --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper
 
-
+#
 sudo docker run -d \
 -e KEEP_VERSIONS="2" \
 -v /mnt/fastshare/klipper:/backup \
