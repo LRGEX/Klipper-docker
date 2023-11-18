@@ -112,7 +112,6 @@ services:
       - KEEP_VERSIONS=2
       - LOCAL_BACKUP=true
       - TZ=Asia/Riyadh
-      - CRON=0 8 * * *
 
 volumes:
   klipper-config:
