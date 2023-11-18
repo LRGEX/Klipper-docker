@@ -49,6 +49,7 @@ sudo docker run -d \
 --tmpfs /tmp \
 --tmpfs /run \
 --tmpfs /run/lock \
+-- restart always
 lrgex/klipper-docker
 
 
@@ -94,6 +95,7 @@ services:
     ports:
       - "5001:80"
       - "7125:7125"
+    restart: always  
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
 
