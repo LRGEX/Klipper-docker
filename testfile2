@@ -101,4 +101,4 @@ VOLUME [ "/tmp", "/run", "/run/lock" ]
 # Set the entrypoint
 ENTRYPOINT ["/opt/lrgex/kiauh/test-entrypoint.sh"]
 
-# sudo docker run -d --name klipper -p 8562:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper.
+# sudo docker run -d --name klipper -p 8562:80 --privileged --cap-add SYS_ADMIN --security-opt seccomp=unconfined --cgroup-parent=docker.slice --cgroupns private --tmpfs /tmp --tmpfs /run --tmpfs /run/lock klipper..
