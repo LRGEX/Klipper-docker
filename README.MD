@@ -3,7 +3,7 @@
 
 <p align="center"><img src="https://download.lrgex.com/klipper-logo.png" alt= “” width="100" height="100"></p>
 
-<h3 align="center">Backarosa</h3>
+<h2 align="center">Backarosa</h2>
 
 
 
