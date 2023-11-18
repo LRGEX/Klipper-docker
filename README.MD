@@ -148,7 +148,7 @@ volumes:
 
 
 
-### To manually install  what you need from Kiauh: 
+#### To manually install  what you need from Kiauh: 
 
 Create a docker-compose.yml file ,copy the example below and edit your settings to what suits you. **the most important thing is to edit the devices "/dev/ttyUSB0:/dev/ttyUSB0"** and change it for your USB  tty. you can find more information on how to do it [here]().
 
