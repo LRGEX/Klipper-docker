@@ -12,7 +12,7 @@
 
 # <div align="center">Klipper-Docker</div>
 
-<p align="center">W LRGEX Klipper-docker which is a docker container that contains Fluidd,klipper and moonraker all together in one solution, and to add more spice we also added LRGEX-Backarosa which will backup and restore all of your settings at once and it works on both x86/Arm  archetectures</p> 
+<p align="center">LRGEX Klipper-docker which is a docker container that contains Fluidd,klipper and moonraker all together in one solution, and to add more spice we also added LRGEX-Backarosa which will backup and restore all of your settings at once and it works on both x86/Arm  archetectures</p> 
 
 
 
