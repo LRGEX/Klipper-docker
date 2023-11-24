@@ -148,6 +148,8 @@ volumes:
 
 
 
+
+
 #### To manually install  what you need from Kiauh: 
 
 Create a docker-compose.yml file ,copy the example below and edit your settings to what suits you. **the most important thing is to edit the devices "/dev/ttyUSB0:/dev/ttyUSB0"** and change it for your USB  tty. you can find more information on how to do it [here]().
@@ -221,6 +223,21 @@ then
 
 ----
 
+## Stay Up-to-Date
+
+⭐ ${\normalsize{\textcolor{goldenrod}{\texttt{Star this project}}}}$
+
+Watch for releases and updates.
+
+<img src="https://download.lrgex.com/assets/images/givestar.gif" width="500" alt='github star'/>
+
+
+## Support Me
+
+Please ⭐ star this repository!
+
+If you found my work useful, consider buying me a [<img src="https://download.lrgex.com/assets/images/coffee.png" height="20" alt='Ko-fi'/>](https://ko-fi.com/lrgex).
+
 
 
 
@@ -254,5 +271,6 @@ then
   -e RESTORE_VERSION="0" \
   lrgex/backarosa restore
   ```
+
 
   
