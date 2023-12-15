@@ -84,7 +84,7 @@ services:
   klipper-backarosa:
     image: lrgex/backarosa
     container_name: klipper-backarosa
-    restart: no
+    restart: "no"
     command: backup
     volumes:
       - /mnt/backups/klipper:/backup
@@ -142,7 +142,7 @@ services:
   klipper-backarosa:
     image: lrgex/backarosa
     container_name: klipper-backarosa
-    restart: no
+    restart: "no"
     command: backup
     volumes:
       - /mnt/backups/klipper:/backup
@@ -201,7 +201,7 @@ services:
   klipper-backarosa:
     image: lrgex/backarosa
     container_name: klipper-backarosa
-    restart: no
+    restart: "no"
     command: backup
     volumes:
       - /mnt/backups/klipper:/backup
